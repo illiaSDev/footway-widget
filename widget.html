@@ -68,16 +68,51 @@
   <script type="text/javascript">
 
     if (!Detector.webgl) {
-      Detector.addGetWebGLMessage();
+        Detector.addGetWebGLMessage();
     } else {
-      var container = document.getElementById('container');
-      var globe = new DAT.Globe(container);
+        var container = document.getElementById('container');
+        var globe = new DAT.Globe(container);
 
-      // Create the geometry
-      globe.createPoints();
+        var token = 'ya29.Gl2HBYrPlcL4uG1HNQMYIN25cSVEx2FlaUzr2PEoXRhioKkv5K_4ulG3a_aoygwM_lsroDyANwqznDnLvGzsNNvdAQg4Yg0hh27i4ItXErpMp6bEt0gisfAqJooLv3k'
+        var url = 'https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A70456627&start-date=yesterday&end-date=today&metrics=ga%3Asessions&dimensions=ga%3Alatitude%2Cga%3Alongitude&access_token=' + token
 
-      // Begin animation
-      globe.animate();
+        var xhr = new XMLHttpRequest();
+        xhr.open( 'GET', url, true );
+
+        // What do we do when we have it?
+        xhr.onreadystatechange = function() {
+
+            // If we've received the data
+            if ( xhr.readyState === 4 && xhr.status === 200 ) {
+
+                // Parse the JSON
+                var data = JSON.parse( xhr.responseText ).rows;
+                var maxValue = data.map(data => data[2]).reduce((a, b) => a > b ? a : b)
+                var rawdata = data
+                    .map(data => [data[0], data[1], data[2] / maxValue, Math.random() * 0.3 + 1.3])
+                    .reduce((a, b) => a.concat(b), []);
+
+                // Tell the globe about your JSON data
+                globe.addData(rawdata, {format: 'legend', name: 'meh'} );
+
+                // Create the geometry
+                globe.createPoints();
+
+                // Begin animation
+                globe.animate();
+
+            }
+
+        };
+
+        // Begin request
+        xhr.send( null );
+
+        // Create the geometry
+        globe.createPoints();
+
+        // Begin animation
+        globe.animate();
     }
 
   </script>
