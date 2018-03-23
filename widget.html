@@ -79,6 +79,11 @@
         var xhr = new XMLHttpRequest();
         xhr.open( 'GET', url, true );
 
+        function getRandomColor() {
+            var colors = [1.6, 1.5, 1.4, 1.05]
+            return colors[Math.floor(Math.random() * colors.length)]
+        }
+
         // What do we do when we have it?
         xhr.onreadystatechange = function() {
 
@@ -89,7 +94,7 @@
                 var data = JSON.parse( xhr.responseText ).rows;
                 var maxValue = data.map(data => data[2]).reduce((a, b) => a > b ? a : b)
                 var rawdata = data
-                    .map(data => [data[0], data[1], data[2] / maxValue, Math.random() * 0.3 + 1.3])
+                    .map(data => [data[0], data[1], Math.sqrt(data[2]) / maxValue, getRandomColor()])
                     .reduce((a, b) => a.concat(b), []);
 
                 // Tell the globe about your JSON data
