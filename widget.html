@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <title>footway-widget</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+
+  <!-- <table>
+    <thead>
+      <tr>
+        <td></td>
+        <td colspan="5">Today</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td>300</td>
+        <td></td>
+        <td></td>
+        <td>200</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Estimated</td>
+        <td>100</td>
+        <td>100</td>
+        <td>100</td>
+        <td>100</td>
+        <td>100</td>
+      </tr>
+      <tr height="200">
+        <td></td>
+        <td></td>
+        <td>20</td>
+        <td>30</td>
+        <td></td>
+        <td>50</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>Foo</td>
+        <td>Foo</td>
+        <td>Foo</td>
+        <td>Foo</td>
+        <td>Foo</td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>Yesterday</td>
+        <td>500</td>
+        <td>500</td>
+        <td>500</td>
+        <td>500</td>
+        <td>500</td>
+      </tr>
+    </tfoot>
+  </table> -->
+  <div id="container"></div>
+
+  <script type="text/javascript" src="/globe/third-party/Detector.js"></script>
+  <script type="text/javascript" src="/globe/third-party/three.min.js"></script>
+  <script type="text/javascript" src="/globe/third-party/Tween.js"></script>
+  <script type="text/javascript" src="/globe/globe.js"></script>
+  <script type="text/javascript">
+
+    if (!Detector.webgl) {
+      Detector.addGetWebGLMessage();
+    } else {
+      var container = document.getElementById('container');
+      var globe = new DAT.Globe(container);
+
+      // Create the geometry
+      globe.createPoints();
+
+      // Begin animation
+      globe.animate();
+    }
+
+  </script>
+  </body>
+</html>
