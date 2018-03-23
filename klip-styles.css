@@ -1,0 +1,7 @@
+body {
+    background: #000 url('https://app.klipfolio.com/assets/file/@3fc38367b1fb405b79101feb2d0cbf40/Footway-BG.png');
+}
+
+.klip, .klip-body {
+    background-color: transparent;
+}
