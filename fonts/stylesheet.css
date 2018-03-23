@@ -4,7 +4,6 @@
          url('agencyfb-bold-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-
 }
 
 @font-face {
@@ -13,5 +12,12 @@
          url('agencyfb-regular-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+}
 
+body, p, td, select, .jvectormap-label, .adwordsReportTypesTooltip{
+    font-family: agencyfb-regularregular, sans-serif;
+}
+
+button, span.button, input[type="button"] {
+    font-family: agencyfb-regularregular, sans-serif;
 }
