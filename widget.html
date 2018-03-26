@@ -92,11 +92,14 @@
             if ( xhr.readyState === 4 && xhr.status === 200 ) {
 
                 // Parse the JSON
-                var data = JSON.parse( xhr.responseText ).rows;
-                var maxValue = data.map(data => data[2]).reduce((a, b) => a > b ? a : b)
-                var rawdata = data
-                    .map(data => [data[0], data[1], Math.sqrt(data[2]) / maxValue, getRandomColor()])
-                    .reduce((a, b) => a.concat(b), []);
+                // var data = JSON.parse( xhr.responseText ).rows;
+                // var maxValue = data.map(data => data[2]).reduce((a, b) => a > b ? a : b)
+                // var rawdata = data
+                //     .map(data => [data[0], data[1], Math.sqrt(data[2]) / maxValue, getRandomColor()])
+                //     .reduce((a, b) => a.concat(b), []);
+
+                var data = JSON.parse( xhr.responseText );
+                var rawdata = data.map(row => ([row.longitude, row.latitude, 1, getRandomColor()]))
 
                 // Tell the globe about your JSON data
                 globe.addData(rawdata, {format: 'legend', name: 'meh'} );
