@@ -21,3 +21,7 @@ body, p, td, select, .jvectormap-label, .adwordsReportTypesTooltip{
 button, span.button, input[type="button"] {
     font-family: agencyfb-regularregular, sans-serif;
 }
+
+.cx-table th, .cx-table td {
+    background-color: transparent !important;
+}
