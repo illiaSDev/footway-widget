@@ -1,4 +1,18 @@
-@import url('https://attractor.ai/footway-widget/fonts/stylesheet.css');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
+body, p, td, select, .jvectormap-label, .adwordsReportTypesTooltip{
+    font-family: 'Roboto', sans-serif;
+    color: #c1c1c1;
+}
+
+button, span.button, input[type="button"] {
+    font-family: 'Roboto', sans-serif;
+    color: #c1c1c1;
+}
+
+.cx-table th, .cx-table td {
+    background-color: transparent !important;
+}
 
 body {
     background: #000 url('https://app.klipfolio.com/assets/file/@3fc38367b1fb405b79101feb2d0cbf40/Footway-BG.png');
