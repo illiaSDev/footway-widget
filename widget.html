@@ -55,8 +55,8 @@
 
                 var data = JSON.parse( xhr.responseText );
                 var rawdata = data
-                    .map(row => ([row.latitude, row.longitude, .5, getRandomColor()]))
-                    .reduce((a, b) => a.concat(b), []);
+                    .map(function(row) {return [row.latitude, row.longitude, .5, getRandomColor()]; })
+                    .reduce(function(a, b) { return a.concat(b); }, []);
 
                 // Tell the globe about your JSON data
                 globe.addData(rawdata, {format: 'legend', name: 'meh'} );
