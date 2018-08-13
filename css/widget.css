@@ -7,6 +7,9 @@ html, body {
 table td {
     border: 1px solid #fff;
 }
+body {
+    background: #000 url('/img/bg.png');
+}
 
 #container {
     /*width: 50%;*/

@@ -1,84 +1,234 @@
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/client:platform.js"></script>
+    <!-- <meta name="google-signin-client_id" content='783637169858-pb2g0vlukkpr1esav7akdjvs1c95vhas.apps.googleusercontent.com'> -->
     <title>footway-widget</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/css/widget.css">
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: #000 url('/img/bg.png');
+        color: #ffffff;
+        font-family: sans-serif;
+        font-size: 13px;
+        line-height: 20px;
+        height: 100%;
+      }
+      #info {
+        font-size: 11px;
+        position: absolute;
+        bottom: 5px;
+        background-color: rgba(0,0,0,0.8);
+        border-radius: 3px;
+        right: 10px;
+        padding: 10px;
+      }
+      #currentInfo {
+        width: 270px;
+        position: absolute;
+        left: 20px;
+        top: 63px;
+        background-color: rgba(0,0,0,0.2);
+        border-top: 1px solid rgba(255,255,255,0.4);
+        padding: 10px;
+      }
+      a {
+        color: #aaa;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .bull {
+        padding: 0 5px;
+        color: #555;
+      }
+      #title {
+        position: absolute;
+        top: 20px;
+        width: 270px;
+        left: 20px;
+        background-color: rgba(0,0,0,0.2);
+        border-radius: 3px;
+        font: 20px Georgia;
+        padding: 10px;
+      }
+      .year {
+        font: 16px Georgia;
+        line-height: 26px;
+        height: 30px;
+        text-align: center;
+        float: left;
+        width: 90px;
+        color: rgba(255, 255, 255, 0.4);
+        cursor: pointer;
+        -webkit-transition: all 0.1s ease-out;
+      }
+      .year:hover, .year.active {
+        font-size: 23px;
+        color: #fff;
+      }
+      #ce span {
+        display: none;
+      }
+      #ce {
+        width: 107px;
+        height: 55px;
+        display: block;
+        position: absolute;
+        bottom: 15px;
+        left: 20px;
+        background: url(/globe/ce.png);
+      }
+
+    </style>
   </head>
   <body>
 
-  <div id="container"></div>
+      <div id="container"></div>
 
-  <script type="text/javascript" src="globe/third-party/Detector.js"></script>
-  <script type="text/javascript" src="globe/third-party/three.min.js"></script>
-  <script type="text/javascript" src="globe/third-party/Tween.js"></script>
+      <div id="info">
+        <strong><a href="http://www.chromeexperiments.com/globe">WebGL Globe</a></strong> <span class="bull">&bull;</span> Created by the Google Data Arts Team <span class="bull">&bull;</span> Data acquired from <a href="http://sedac.ciesin.columbia.edu/gpw/">SEDAC</a>
+      </div>
+    
+      <div id="currentInfo" style="display:none">
+        <span id="year1990" class="year">1990</span>
+        <span id="year1995" class="year">1995</span>
+        <span id="year2000" class="year">2000</span>
+      </div>
+    
+      <div id="title">
+        World Population
+      </div>
+    
+      <a id="ce" href="http://www.chromeexperiments.com/globe">
+        <span>This is a Chrome Experiment</span>
+      </a>
+    
+
+  <script type="text/javascript" src="/js/globe/third-party/Detector.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/95/three.js" integrity="sha256-FwTTYdPnTK425pwAvJtZlkeyMIZiSVTRWb98a21tVtg=" crossorigin="anonymous"></script>
+  <!-- <script type="text/javascript" src="/js/globe/third-party/three.min.js"></script> -->
+  <script type="text/javascript" src="/js/globe/third-party/Tween.js"></script>
   <script type="text/javascript">
 
     // Options for the widget
-    window.rotationSpeedX = 3; // [..., -2, -1, 0, 1, 2, ...];
-    window.colorsPossibleLuminance = [1.6, 1.5, 1.4, 1.05];
+    window.rotationSpeedX = 1; // [..., -2, -1, 0, 1, 2, ...];
+    window.colorsPossibleLuminance = [1, 2, 3, 4];
 
   </script>
-  <script type="text/javascript" src="globe/globe.js"></script>
+  <script type="text/javascript" src="/js/globe/globe.js"></script>
   <script type="text/javascript">
-
     if (!Detector.webgl) {
-        Detector.addGetWebGLMessage();
+      Detector.addGetWebGLMessage();
     } else {
-        var container = document.getElementById('container');
-        var globe = new DAT.Globe(container);
+      var years = ['1990','1995','2000'];
+      var container = document.getElementById('container');
+      var globe = new DAT.Globe(container);
+      window.globe = globe;
+      var i;
+  
+    var settime = function(globe, t) {
+      return function() {
+        new TWEEN.Tween(globe).to({ time: t/years.length }, 500).easing(TWEEN.Easing.Cubic.EaseOut).start();
 
-        var url = 'data.json'
-
-        var xhr = new XMLHttpRequest();
-        xhr.open( 'GET', url, true );
-
-        function getRandomColor() {
-            var colors = window.colorsPossibleLuminance;
-            return colors[Math.floor(Math.random() * colors.length)]
+        var y = document.getElementById('year'+years[t]);
+        if (y.getAttribute('class') === 'year active') {
+          return;
         }
 
-        // What do we do when we have it?
-        xhr.onreadystatechange = function() {
+        var yy = document.getElementsByClassName('year');
+        for(i=0; i<yy.length; i++) {
+          yy[i].setAttribute('class','year');
+        }
 
-            // If we've received the data
-            if ( xhr.readyState === 4 && xhr.status === 200 ) {
+        y.setAttribute('class', 'year active');
+      };
+    };
+    
+    for(var i = 0; i < years.length; i++) {
+      var y = document.getElementById('year' + years[i]);
+      y.addEventListener('mouseover', settime(globe, i), false);
+    }
+    
+    var xhr;
+    TWEEN.start();
 
-                // Parse the JSON
-                // var data = JSON.parse( xhr.responseText ).rows;
-                // var maxValue = data.map(data => data[2]).reduce((a, b) => a > b ? a : b)
-                // var rawdata = data
-                //     .map(data => [data[0], data[1], Math.sqrt(data[2]) / maxValue, getRandomColor()])
-                //     .reduce((a, b) => a.concat(b), []);
+      var url = '/test.json'
 
-                var data = JSON.parse( xhr.responseText );
-                var rawdata = data
-                    .map(function(row) {return [row.latitude, row.longitude, .5, getRandomColor()]; })
-                    .reduce(function(a, b) { return a.concat(b); }, []);
+      var xhr = new XMLHttpRequest();
+      xhr.open( 'GET', url, true );
 
-                // Tell the globe about your JSON data
-                globe.addData(rawdata, {format: 'legend', name: 'meh'} );
+      function getRandomColor() {
+          var colors = window.colorsPossibleLuminance;
+          return colors[Math.floor(Math.random() * colors.length)]
+      }
 
-                // Create the geometry
-                globe.createPoints();
+      // What do we do when we have it?
+      xhr.onreadystatechange = function() {
 
-                // Begin animation
-                globe.animate();
+          // If we've received the data
+          if ( xhr.readyState === 4 && xhr.status === 200 ) {
 
-            }
+              // Parse the JSON
+              // var data = JSON.parse( xhr.responseText ).rows;
+              // var maxValue = data.map(data => data[2]).reduce((a, b) => a > b ? a : b)
+              // var rawdata = data
+              //     .map(data => [data[0], data[1], Math.sqrt(data[2]) / maxValue, getRandomColor()])
+              //     .reduce((a, b) => a.concat(b), []);
 
-        };
+              var data = JSON.parse( xhr.responseText );
+              // for ( var i = 0; i < data.length; i ++ ) {
+              //     globe.addData( data[i][1], {format: 'magnitude', name: data[i][0]} );
+              // }
+              let dt = [{"longitude":-157.986001,"latitude":23.204883},{"longitude":-115.068759,"latitude":36.689709},{"longitude":-118.543423,"latitude":34.277659},{"longitude":-118.08917,"latitude":34.131467},{"longitude":-117.664529,"latitude":33.659775},{"longitude":-117.008833,"latitude":32.671819},{"longitude":-111.924698,"latitude":33.513967},{"longitude":-82.732616,"latitude":28.057426},{"longitude":-81.662596,"latitude":28.274985},{"longitude":-81.580013,"latitude":28.427098},{"longitude":-81.516187,"latitude":28.371449},{"longitude":-81.514533,"latitude":28.373409},{"longitude":-73.978358,"latitude":40.777134},{"longitude":-76.174418,"latitude":43.074004},{"longitude":-78.979215,"latitude":43.100706},{"longitude":-81.904904,"latitude":41.456249},{"longitude":-87.618581,"latitude":41.895687},{"longitude":-94.719776,"latitude":38.954617}]
+              var rawdata = dt
+                  .map(function(row) { return [row.latitude, row.longitude, 1]; })
+                  .reduce(function(a, b) { return a.concat(b); }, []);
+              var testData = data.rows.reduce(function(a, it){
+                return a.concat([it[1], it[2], it[3], 210]);
+              }, [])
+              //data.push(["Somedata", rawdata]);
 
-        // Begin request
-        xhr.send( null );
+              // Tell the globe about your JSON data
+              //for (i=0;i<data.length;i++) {
+                //globe.addData(data[0][1], { format: 'magnitude', name: data[0][0]});
+              //}
+              // globe.addData(rawdata, {format: 'magnitude', name: "Somename",animated: true } );
 
-        // Create the geometry
-        globe.createPoints();
+              globe.addData(testData, { format: 'legend', name: "Test data"});
+              // Create the geometry
+              globe.createPoints();
+              //settime(globe,0)();
+              // Begin animation
+              globe.animate();
+              // function z(){
+              //   globe.reset();
+              //   window.cancelAnimationFrame(globe.rqstid);
+              //   globe.addData(rawdata, { format: 'magnitude', name: "Somedata"});
+              //   globe.createPoints();
+              //   globe.animate();
+                
+              // }
+              // setTimeout(z, 5000)
+          }
+      };
 
-        // Begin animation
-        globe.animate();
+      // Begin request
+      xhr.send( null );
     }
 
+    
+
+
   </script>
+  <script src='/js/auth.js'></script>
   </body>
 </html>
